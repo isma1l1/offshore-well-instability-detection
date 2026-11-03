@@ -17,6 +17,10 @@ Flow instability is a degraded flow regime in which sensor signals show non-peri
 - Only one sensor is used: **P-TPT**, the pressure at the subsea Christmas tree, measured by the TPT (temperature and pressure transducer).
 - The first hour of each file is unlabeled and is dropped after the features are computed.
 
+**Data quality audit** (`data_quality_audit.py`): for every file and sensor, share of time where the signal is missing or frozen (identical values for at least 60 s), weighted by file duration.
+- P-TPT is available in every well except wells 8 and 10.
+- In unstable files, P-TPT is frozen less than 6% of the time in every well. In normal files, it is frozen about 30% of the time in wells 01, 02 and 06: part of the contrast in agitation between the two classes may therefore come from how the sensor reports a stable signal.
+
 ## Approach
 
 ### 1. Exploratory analysis (`exploratory_data_analysis.py`)
@@ -99,8 +103,6 @@ On fold 2, **well 19** accounts for 96% of the false alarms (71% of its normal h
 
 A model based on absolute agitation cannot separate this well from a real instability: the limitation comes from the feature, not from the model.
 
-`error_exploration.py` gathers early per-well diagnostics on the first 30 files of wells 01, 02, 04 and 05, over the whole recording period: share of frozen sensor values, fast and slow pressure variations, and a leave-one-well-out decision tree on a first feature set (30-min 90th percentile, maximum, and share of 3-min agitation above 0.1 bar).
-
 ## Limitations
 
 - **Single sensor**: wells 8 and 10 have no P-TPT data and are not covered.
@@ -119,8 +121,8 @@ A model based on absolute agitation cannot separate this well from a real instab
 | File | Content |
 |---|---|
 | `exploratory_data_analysis.py` | signal comparisons and feature distributions per well |
-| `model_evaluation.py` | data loading, features, walk-forward split, grid search, results per fold and per well, test |
-| `error_exploration.py` | per-well diagnostics and leave-one-well-out comparison |
+| `data_quality_audit.py` | share of missing and frozen signal per sensor and well |
+| `model_evaluation.py` | data loading, features, walk-forward split, grid search, results per fold and per well (error analysis), test |
 
 ## How to run
 
@@ -131,9 +133,9 @@ pip install -r requirements.txt
 Download the [3W dataset](https://github.com/petrobras/3W) and place its `dataset` folder at the root of this repository (or create a symbolic link named `dataset`), then run:
 
 ```bash
+python data_quality_audit.py
 python exploratory_data_analysis.py
 python model_evaluation.py
-python error_exploration.py
 ```
 
 Monotonic constraints in `RandomForestClassifier` require scikit-learn 1.4 or later.
