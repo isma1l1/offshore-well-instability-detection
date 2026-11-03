@@ -8,7 +8,7 @@ Detecting flow instability (class 4) on real offshore sensor time series from th
 
 ## Problem
 
-Flow instability is a degraded flow regime in which sensor signals show non-periodic oscillations that stay within the tolerable range, which makes it hard for operators to spot in real time; it can evolve into slug flow, a more severe condition for the installations ([Carvalho, 2021](https://github.com/petrobras/3W/raw/main/docs/master_degree_dissertation_bruno_carvalho.pdf)). The goal is to raise an alarm while the well is unstable, prioritising recall (a missed instability is costlier than a false alarm) while keeping false alarms low enough for operators to trust the system.
+Flow instability is a degraded flow regime in which sensor signals show non-periodic oscillations that stay within the tolerable range, which makes it hard for operators to spot in real time; it can evolve into slug flow, a more severe condition for the installations. The goal is to raise an alarm while the well is unstable, prioritising recall (a missed instability is costlier than a false alarm) while keeping false alarms low enough for operators to trust the system.
 
 ## Data
 
